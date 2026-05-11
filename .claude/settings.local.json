@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"e:\\\\devE\\\\Fmkorea-Preview-2\" 2>/dev/null || echo \"NOT FOUND\")",
+      "Read(//e/devE/Fmkorea-Preview-2/**)"
+    ]
+  }
+}

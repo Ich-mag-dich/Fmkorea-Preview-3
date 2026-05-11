@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.fmk-overlay-animate {
+  animation: overlay-in 0.12s ease-out both;
+}
+
+.fmk-modal-animate {
+  animation: modal-in 0.15s ease-out both;
+}
