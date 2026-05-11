@@ -1,7 +1,7 @@
 {
   "name": "fmkorea-preview",
   "displayName": "Fmkorea preview - 에펨코리아 게시글 미리보기",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "창을 이동하지 않고 게시글을 미리 봅니다.",
   "private": true,
   "scripts": {
@@ -24,7 +24,12 @@
     "typescript": "~6.0.2"
   },
   "manifest": {
-    "host_permissions": ["https://www.fmkorea.com/*"]
+    "host_permissions": [
+      "https://www.fmkorea.com/*"
+    ],
+    "permissions": [
+      "storage"
+    ]
   },
   "trustedDependencies": [
     "@parcel/watcher",

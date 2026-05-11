@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(ls \"e:\\\\devE\\\\Fmkorea-Preview-2\" 2>/dev/null || echo \"NOT FOUND\")",
-      "Read(//e/devE/Fmkorea-Preview-2/**)"
+      "Read(//e/devE/Fmkorea-Preview-2/**)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Read(//tmp/**)",
+      "Bash(xargs grep -l \"onInstalled\\\\|onUpdated\\\\|chrome.runtime.onInstalled\")",
+      "Bash(bun x *)"
     ]
   }
 }
