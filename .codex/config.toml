@@ -10,9 +10,12 @@ args = [ "start-mcp-server", "--context", "codex", "--project", "." ]
 [mcp_servers.serena.env]
 SERENA_LOG_LEVEL = "info"
 
+[mcp_servers.playwright]
+command = "npx"
+args = [ "-y", "@playwright/mcp@latest" ]
+
 [analytics]
 enabled = false
 
 [feedback]
 enabled = false
-

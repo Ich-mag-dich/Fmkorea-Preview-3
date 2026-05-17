@@ -23,3 +23,8 @@ pnpm-debug.log*
 .claude/*
 
 .sample
+
+# Local agent/tool state
+.playwright-mcp/
+.serena/
+.agents/state/
