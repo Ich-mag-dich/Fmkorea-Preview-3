@@ -22,16 +22,4 @@ pnpm-debug.log*
 
 .claude/*
 
-# Research / reference files
-addComment.js
-commentVoteUp.js
-vote-up.js
-reference.html
-reply_to_comment.js
-home_vote_up.js
-
-
-
-# Old version
-Fmkorea-Preview-2/
-
+.sample
