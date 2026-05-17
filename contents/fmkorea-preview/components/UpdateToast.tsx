@@ -19,7 +19,7 @@ export function UpdateToast({ version, onClose }: UpdateToastProps) {
               에펨코리아 미리보기 업데이트
             </p>
             <p className="mt-1 text-xs text-gray-500">
-              v{version} - 대댓글, 미디어 임베드, UI 개선, 이미지 너비 조정
+              v{version} - 댓글 UI 개선, 레벨/아이콘 표시, 스크롤/팝업 위치 수정, 구조 분리
             </p>
           </div>
           <button
