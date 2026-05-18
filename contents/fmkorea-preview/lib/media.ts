@@ -1,5 +1,65 @@
 import { BASE_URL } from "../constants";
 
+const DEFAULT_VIDEO_VOLUME = 0.5;
+const VIDEO_VOLUME_STORAGE_KEY = "fmk_preview_video_volume";
+
+let cachedVideoVolume = DEFAULT_VIDEO_VOLUME;
+
+const normalizeVideoVolume = (value: unknown) =>
+  typeof value === "number" && value >= 0 && value <= 1
+    ? value
+    : DEFAULT_VIDEO_VOLUME;
+
+const getStoredVideoVolume = () => {
+  if (typeof chrome === "undefined" || !chrome.storage?.local) {
+    return Promise.resolve(cachedVideoVolume);
+  }
+
+  return new Promise<number>((resolve) => {
+    chrome.storage.local.get(VIDEO_VOLUME_STORAGE_KEY, (result) => {
+      cachedVideoVolume = normalizeVideoVolume(
+        result[VIDEO_VOLUME_STORAGE_KEY],
+      );
+      resolve(cachedVideoVolume);
+    });
+  });
+};
+
+const saveVideoVolume = (volume: number) => {
+  cachedVideoVolume = normalizeVideoVolume(volume);
+  if (typeof chrome === "undefined" || !chrome.storage?.local) return;
+  chrome.storage.local.set({ [VIDEO_VOLUME_STORAGE_KEY]: cachedVideoVolume });
+};
+
+export const applyDefaultVideoVolume = (video: HTMLVideoElement) => {
+  video.volume = cachedVideoVolume;
+};
+
+export const initializePreviewVideoVolume = (root: Element) => {
+  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video"));
+  let applyingStoredVolume = true;
+
+  const cleanupHandlers = videos.map((video) => {
+    const handleVolumeChange = () => {
+      if (applyingStoredVolume) return;
+      saveVideoVolume(video.volume);
+    };
+    video.addEventListener("volumechange", handleVolumeChange);
+    return () => video.removeEventListener("volumechange", handleVolumeChange);
+  });
+
+  getStoredVideoVolume().then((volume) => {
+    videos.forEach((video) => {
+      video.volume = volume;
+    });
+    window.setTimeout(() => {
+      applyingStoredVolume = false;
+    }, 0);
+  });
+
+  return () => cleanupHandlers.forEach((cleanup) => cleanup());
+};
+
 export const fixAttr = (el: Element, attr: string) => {
   const val = el.getAttribute(attr);
   if (val?.startsWith("//")) el.setAttribute(attr, `https:${val}`);
@@ -41,9 +101,7 @@ const cleanVideoWrappers = (root: Element) => {
       newVid.muted = true;
     }
 
-    newVid.addEventListener("loadedmetadata", () => {
-      newVid.volume = 0.5;
-    });
+    applyDefaultVideoVolume(newVid);
 
     wrapper.replaceWith(newVid);
   });
@@ -210,6 +268,7 @@ export const cleanContent = (root: Element) => {
       vid.style.maxWidth = "100%";
       vid.style.maxHeight = "480px";
       vid.style.width = "auto";
+      applyDefaultVideoVolume(vid);
     }
   });
   absolutizeMedia(root);

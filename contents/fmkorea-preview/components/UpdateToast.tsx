@@ -8,8 +8,7 @@ export function UpdateToast({ version, onClose }: UpdateToastProps) {
     <div
       className="fmk-toast-animate fixed bottom-6 right-6 z-[2147483647] w-80 overflow-hidden rounded-2xl bg-white"
       style={{
-        boxShadow:
-          "0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10)",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10)",
       }}
     >
       <div className="px-5 py-4">
@@ -19,7 +18,8 @@ export function UpdateToast({ version, onClose }: UpdateToastProps) {
               에펨코리아 미리보기 업데이트
             </p>
             <p className="mt-1 text-xs text-gray-500">
-              v{version} - 댓글 UI 개선, 레벨/아이콘 표시, 스크롤/팝업 위치 수정, 구조 분리
+              v{version} - 비디오 소리 조절 저장, 댓글 UI 개선, 레벨/아이콘
+              표시, 스크롤/팝업 위치 수정, 구조 분리
             </p>
           </div>
           <button

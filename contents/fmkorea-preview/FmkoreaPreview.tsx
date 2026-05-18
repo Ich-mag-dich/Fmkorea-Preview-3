@@ -11,6 +11,7 @@ import { CommentItem } from "./components/CommentItem";
 import { MemberPopupMenu } from "./components/MemberPopupMenu";
 import { UpdateToast } from "./components/UpdateToast";
 import { historyManager } from "./lib/history-manager";
+import { initializePreviewVideoVolume } from "./lib/media";
 import { hidePageScrollbar, restorePageScrollbar } from "./lib/page-scrollbar";
 import { getPreviewLink } from "./lib/preview-link";
 import type {
@@ -270,9 +271,10 @@ export default function FmkoreaPreview() {
   }, [updateVersion]);
 
   useEffect(() => {
-    if (postContentRef.current && post?.content) {
-      postContentRef.current.innerHTML = post.content;
-    }
+    if (!postContentRef.current || !post?.content) return;
+
+    postContentRef.current.innerHTML = post.content;
+    return initializePreviewVideoVolume(postContentRef.current);
   }, [post?.content]);
 
   if (!visible && !updateVersion) return null;
