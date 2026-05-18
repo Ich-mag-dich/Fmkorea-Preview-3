@@ -25,6 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
           fetch-depth: 0
 
       - name: Setup Bun
@@ -52,6 +53,28 @@ jobs:
       - name: Package extension
         run: bun run package
 
+      - name: Generate release notes
+        run: |
+          previous_tag="$(git tag --sort=-v:refname | awk -v current="${RELEASE_TAG}" '$0 != current { print; exit }')"
+          current_tag="${RELEASE_TAG}"
+
+          {
+            echo "## Changes"
+            echo
+
+            if [ -n "$previous_tag" ]; then
+              git log --pretty=format:"- %s (%h)" "${previous_tag}..${current_tag}"
+              echo
+              echo
+              echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${previous_tag}...${current_tag}"
+            else
+              git log --pretty=format:"- %s (%h)" "${current_tag}"
+              echo
+              echo
+              echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/commits/${current_tag}"
+            fi
+          } > release-notes.md
+
       - name: Prepare release asset
         run: |
           mkdir -p release
@@ -69,6 +92,6 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           name: Fmkorea Preview ${{ env.RELEASE_TAG }}
-          generate_release_notes: true
+          body_path: release-notes.md
           files: release/*.zip
           fail_on_unmatched_files: true
